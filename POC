@@ -1,0 +1,52 @@
+Description: Path Traversal & Local File Inclusion (LFI) Vulnerability
+
+Overview
+
+Path Traversal and Local File Inclusion (LFI) vulnerabilities arise when an application improperly processes user-supplied input to access system files. This can lead to unauthorized access, information disclosure, or even remote code execution in some cases.
+
+Path Traversal
+
+Path Traversal occurs when an attacker manipulates file paths using sequences like ../ (dot-dot-slash) to navigate directories and access restricted files. If an application improperly constructs file paths, attackers can retrieve sensitive data such as:
+
+System configuration files (/etc/passwd, C:\windows\system.ini)
+Application source code
+Log files containing credentials or tokens
+     Severity: High
+
+ 
+
+Affected URL :  https://webservices.admin.cam.ac.uk/events/uploadedImages/fb/image_197132_320f3a4f-b751-474c-ac81-c7bfc1f9a5d7_tiny.jpg
+
+ 
+
+Steps to Reproduce :
+
+1. First obsove the parmater in burp proxy histry Open the following URL in a browser
+
+2.  Observe that system file content is exposed
+
+3.  Capture the request into the burp to add page load to see the response and repeater
+
+4.  It was exploit to give information in local file inclusion scene in Render
+
+5. Then right click to view to response in the browser option selected and seeing the response it was exploit
+
+Payload: %252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252f%252e%252e%252fetc%252fpasswd
+
+ 
+
+Impact:
+
+- Attackers can read sensitive files.
+
+- Possible RCE if PHP files are included.
+
+ 
+
+Recommended Fixes:
+
+- Validate and whitelist file names.
+
+- Use `realpath()` to ensure files are within an allowed directory.
+
+- Restrict file permissions.
